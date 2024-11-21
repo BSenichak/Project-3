@@ -1,0 +1,11 @@
+@use "../../styles/colors" as color;
+
+.wrapper {
+    width: 100vw;
+    height: 50px;
+    background-color: color.$primary-100;
+    color: color.$bg-100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
