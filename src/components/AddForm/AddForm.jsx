@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import PropTypes from "prop-types";
 import style from "./AddForm.module.scss";
+import { ContextStore } from "../../store/ContextStore";
 
 function AddForm(props) {
     const [title, setTitle] = useState("");
@@ -13,6 +14,15 @@ function AddForm(props) {
     const titleRef = useRef(null);
     const dateRef = useRef(null);
     const timeRef = useRef(null);
+
+    let { addEvent } = useContext(ContextStore);
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (correct) {
+            addEvent({ title, date, time, color });
+            props.open(false);
+        }
+    };
 
     useEffect(() => {
         titleRef.current.style.display = "none";
@@ -99,7 +109,11 @@ function AddForm(props) {
                         onChange={(e) => setColor(e.target.value)}
                     />
                 </div>
-                <button className={style.button} disabled={!correct}>
+                <button
+                    className={style.button}
+                    disabled={!correct}
+                    onClick={handleSubmit}
+                >
                     Add
                 </button>
             </div>

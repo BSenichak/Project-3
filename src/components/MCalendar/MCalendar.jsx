@@ -1,0 +1,88 @@
+import React, { useContext, useState } from "react";
+import PropTypes from "prop-types";
+import style from "./MCalendar.module.scss";
+import { ContextStore } from "../../store/ContextStore";
+
+function MCalendar(props) {
+    let { events } = useContext(ContextStore);
+    const [currentDate, setCurrentDate] = useState(new Date());
+
+    const getCalendarDates = (year, month) => {
+        const startOfMonth = new Date(year, month, 1);
+        const endOfMonth = new Date(year, month + 1, 0);
+        const startDay = startOfMonth.getDay() || 7;
+        const totalDays = endOfMonth.getDate();
+        const dates = [];
+        for (let i = 1 - startDay; i <= totalDays; i++) {
+            const date = new Date(year, month, i);
+            dates.push(date);
+        }
+        return dates;
+    };
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const dates = getCalendarDates(year, month);
+
+    return (
+        <div className={style.wrapper}>
+            <div className={style.container}>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Monday</th>
+                            <th>Tuesday</th>
+                            <th>Wednesday</th>
+                            <th>Thursday</th>
+                            <th>Friday</th>
+                            <th>Saturday</th>
+                            <th>Sunday</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {Array.from(
+                            { length: Math.ceil(dates.length / 7) },
+                            (_, weekIndex) => (
+                                <tr key={weekIndex}>
+                                    {dates
+                                        .slice(weekIndex * 7, weekIndex * 7 + 7)
+                                        .map((date, index) => (
+                                            <td key={index}>
+                                                <span className={style.number}>
+                                                    {date.getDate()}
+                                                </span>
+                                                {events
+                                                    .filter(
+                                                        (event) =>
+                                                            event.date ==
+                                                            date
+                                                                .toISOString()
+                                                                .split("T")[0]
+                                                    )
+                                                    .map((event) => (
+                                                        <button
+                                                            className={
+                                                                style.event
+                                                            }
+                                                            style={{
+                                                                borderLeftColor:
+                                                                    event.color,
+                                                            }}
+                                                        >
+                                                            {event.title}
+                                                        </button>
+                                                    ))}
+                                            </td>
+                                        ))}
+                                </tr>
+                            )
+                        )}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+}
+
+MCalendar.propTypes = {};
+
+export default MCalendar;
