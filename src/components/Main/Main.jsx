@@ -4,6 +4,7 @@ import style from "./Main.module.scss";
 import AddForm from "../AddForm/AddForm";
 import { FaRegCalendarPlus } from "react-icons/fa";
 import MCalendar from "../MCalendar/MCalendar";
+import { Routes, Route } from "react-router";
 
 function Main(props) {
     const [modalOpen, setModalOpen] = React.useState(false);
@@ -16,7 +17,12 @@ function Main(props) {
             >
                 <FaRegCalendarPlus />
             </button>
-            <MCalendar />
+            <Routes>
+                <Route path="/" index element={<div>main</div>} />
+                <Route path="/month" element={<MCalendar />} />
+                <Route path="/week" element={<div>week</div>} />
+                <Route path="/day" element={<div>day</div>} />
+            </Routes>
         </main>
     );
 }
@@ -24,4 +30,3 @@ function Main(props) {
 Main.propTypes = {};
 
 export default Main;
-

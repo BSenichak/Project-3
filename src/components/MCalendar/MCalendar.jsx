@@ -8,10 +8,10 @@ function MCalendar(props) {
     const [currentDate, setCurrentDate] = useState(new Date());
 
     const getCalendarDates = (year, month) => {
-        const startOfMonth = new Date(year, month, 1);
+        const startOfMonth = new Date(year, month, 0);
         const endOfMonth = new Date(year, month + 1, 0);
-        const startDay = startOfMonth.getDay() || 7;
-        const totalDays = endOfMonth.getDate();
+        const startDay = startOfMonth.getDay() - 1 || 7;
+        const totalDays = endOfMonth.getDate() + 1;
         const dates = [];
         for (let i = 1 - startDay; i <= totalDays; i++) {
             const date = new Date(year, month, i);
@@ -48,7 +48,7 @@ function MCalendar(props) {
                                         .map((date, index) => (
                                             <td key={index}>
                                                 <span className={style.number}>
-                                                    {date.getDate()}
+                                                    {date.getUTCDate()}
                                                 </span>
                                                 {events
                                                     .filter(
@@ -58,8 +58,9 @@ function MCalendar(props) {
                                                                 .toISOString()
                                                                 .split("T")[0]
                                                     )
-                                                    .map((event) => (
+                                                    .map((event, i) => (
                                                         <button
+                                                            key={i}
                                                             className={
                                                                 style.event
                                                             }

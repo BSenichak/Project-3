@@ -3,14 +3,17 @@ import Header from "./components/Header/Header";
 import Main from "./components/Main/Main";
 import "./styles/generalStyle.scss";
 import StoreProvider from "./store/ContextStore";
+import { BrowserRouter } from "react-router";
 
 function App() {
     return (
-        <StoreProvider>
-            <Header />
-            <Main />
-            <Footer />
-        </StoreProvider>
+        <BrowserRouter>
+            <StoreProvider>
+                <Header />
+                <Main />
+                <Footer />
+            </StoreProvider>
+        </BrowserRouter>
     );
 }
 
