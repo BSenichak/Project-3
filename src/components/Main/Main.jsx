@@ -7,12 +7,13 @@ import MCalendar from "../MCalendar/MCalendar";
 import { Routes, Route } from "react-router";
 import WCalendar from "../WCalendar/WCalendar";
 import DCalendar from "../DCalendar/DCalendar";
+import Modal from "../Modal/Modal";
 
 function Main(props) {
     const [modalOpen, setModalOpen] = React.useState(false);
     return (
         <main className={style.wrapper}>
-            {modalOpen && <AddForm open={setModalOpen} />}
+            {modalOpen && <Modal open={setModalOpen} />}
             <button
                 className={style.addButton}
                 onClick={() => setModalOpen(true)}
