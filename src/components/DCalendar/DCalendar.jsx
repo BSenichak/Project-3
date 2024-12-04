@@ -2,10 +2,8 @@ import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import style from "./DCalendar.module.scss";
 import { ContextStore } from "../../store/ContextStore";
-import { useRequireAuth } from "../../hooks/useRequireAuth";
 
 function DCalendar(props) {
-    useRequireAuth();
     let { events } = useContext(ContextStore);
     const [currentDate, setCurrentDate] = useState(new Date());
 
