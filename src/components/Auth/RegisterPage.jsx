@@ -2,6 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import style from "./Auth.module.scss";
 import { useForm } from "react-hook-form";
+import { useFetch } from "../../hooks/useFetch";
+import { useNavigate } from "react-router";
 
 function RegisterPage(props) {
     const {
@@ -10,10 +12,26 @@ function RegisterPage(props) {
         formState: { errors },
         watch,
     } = useForm();
+
+    const { data, error, loading, refetch } = useFetch(
+        "http://localhost:3000/register",
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+        },
+        false
+    );
+    const onSubmit = (formData) => {
+        refetch(JSON.stringify(formData));
+    };
+
+    const navigate = useNavigate()
+    if(data) navigate("/login");
+
     return (
         <div className={style.wrapper}>
             <h1>Register</h1>
-            <form onSubmit={handleSubmit((data) => console.log(data))}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <label htmlFor="login">Login</label>
                 <input
                     type="text"

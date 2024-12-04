@@ -3,10 +3,11 @@ import PropTypes from "prop-types";
 import style from "./Header.module.scss";
 import { BsCalendar3, BsCalendar4Week } from "react-icons/bs";
 import { IoTodayOutline } from "react-icons/io5";
-import { IoMdCalendar } from "react-icons/io";
 import { NavLink } from "react-router";
+import { useAuth } from "../../hooks/useAuth";
 
 function Header(props) {
+    let { isAuthenticated, logout } = useAuth();
     return (
         <header className={style.wrapper}>
             <NavLink to="/" className={style.logoBar}>
@@ -49,6 +50,29 @@ function Header(props) {
                     <IoTodayOutline />
                     <span>Day</span>
                 </NavLink>
+
+                {!isAuthenticated ? (
+                    <>
+                        <NavLink
+                            to="/login"
+                            className={({ isActive }) =>
+                                isActive ? style.active : style.link
+                            }
+                        >
+                            Login
+                        </NavLink>
+                        <NavLink
+                            to="/register"
+                            className={({ isActive }) =>
+                                isActive ? style.active : style.link
+                            }
+                        >
+                            Register
+                        </NavLink>
+                    </>
+                ) : (
+                    <span onClick={logout}>Log out</span>
+                )}
             </nav>
         </header>
     );

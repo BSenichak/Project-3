@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import style from "./Auth.module.scss";
 import { useForm } from "react-hook-form";
+import { useFetch } from "../../hooks/useFetch";
+import { useAuth } from "../../hooks/useAuth";
 
 function LoginPage(props) {
     const {
@@ -10,10 +12,30 @@ function LoginPage(props) {
         formState: { errors },
         watch,
     } = useForm();
+
+    const { data, error, loading, refetch } = useFetch(
+        "http://localhost:3000/login",
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+        },
+        false
+    );
+    const onSubmit = (formData) => {
+        refetch(JSON.stringify(formData));
+    };
+
+    const { login } = useAuth();
+    useEffect(() => {
+        if (data) {
+            login(data.token);
+        }
+    }, [data]);
+
     return (
         <div className={style.wrapper}>
             <h1>Login</h1>
-            <form onSubmit={handleSubmit((data) => console.log(data))}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <label htmlFor="email">Email</label>
                 <input
                     type="email"
@@ -60,4 +82,3 @@ function LoginPage(props) {
 LoginPage.propTypes = {};
 
 export default LoginPage;
-
