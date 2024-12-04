@@ -1,8 +1,10 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import style from "./Modal.module.scss";
-import { ContextStore } from "../../store/ContextStore";
+
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { addEvent, closeModal } from "../CalendarsReducer";
 
 function Modal(props) {
     let {
@@ -12,10 +14,9 @@ function Modal(props) {
         reset,
     } = useForm();
 
-    let { addEvent } = useContext(ContextStore);
-
+    let dispatch = useDispatch();
     let submit = (data) => {
-        addEvent(data);
+        dispatch(addEvent(data));
         props.open(false);
         reset();
     };
@@ -23,12 +24,14 @@ function Modal(props) {
     return (
         <div
             className={style.wrapper}
-            onClick={(e) => e.target === e.currentTarget && props.open(false)}
+            onClick={(e) =>
+                e.target === e.currentTarget && dispatch(closeModal())
+            }
         >
             <form className={style.inner} onSubmit={handleSubmit(submit)}>
                 <button
                     className={style.closeButton}
-                    onClick={() => props.open(false)}
+                    onClick={() => dispatch(closeModal())}
                 >
                     X
                 </button>

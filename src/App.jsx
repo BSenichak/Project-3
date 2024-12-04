@@ -4,15 +4,17 @@ import Main from "./components/Main/Main";
 import "./styles/generalStyle.scss";
 import StoreProvider from "./store/ContextStore";
 import { BrowserRouter } from "react-router";
+import { useDispatch } from "react-redux";
+import { uploadTokenFromLocalStorage } from "./components/Auth/AuthReducer";
 
 function App() {
+    let dispatch = useDispatch();
+    dispatch(uploadTokenFromLocalStorage());
     return (
         <BrowserRouter>
-            <StoreProvider>
-                <Header />
-                <Main />
-                <Footer />
-            </StoreProvider>
+            <Header />
+            <Main />
+            <Footer />
         </BrowserRouter>
     );
 }

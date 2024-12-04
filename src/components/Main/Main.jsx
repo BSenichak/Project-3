@@ -1,7 +1,5 @@
-import React, { useContext } from "react";
-import PropTypes from "prop-types";
+import React from "react";
 import style from "./Main.module.scss";
-import AddForm from "../AddForm/AddForm";
 import { FaRegCalendarPlus } from "react-icons/fa";
 import MCalendar from "../MCalendar/MCalendar";
 import { Routes, Route } from "react-router";
@@ -10,18 +8,20 @@ import DCalendar from "../DCalendar/DCalendar";
 import Modal from "../Modal/Modal";
 import LoginPage from "../Auth/LoginPage";
 import RegisterPage from "../Auth/RegisterPage";
-import { useAuth } from "../../hooks/useAuth";
+import { useDispatch, useSelector } from "react-redux";
+import { openModal } from "../CalendarsReducer";
 
 function Main(props) {
-    const [modalOpen, setModalOpen] = React.useState(false);
-    const { isAuthenticated } = useAuth();
+    let dispatch = useDispatch();
+    const modalState = useSelector((state) => state.calendars.modalState);
+    const isAuthenticated = useSelector((state) => state.auth.token !== null);
     return (
         <main className={style.wrapper}>
-            {modalOpen && <Modal open={setModalOpen} />}
+            {modalState && <Modal />}
             {isAuthenticated && (
                 <button
                     className={style.addButton}
-                    onClick={() => setModalOpen(true)}
+                    onClick={() => dispatch(openModal())}
                 >
                     <FaRegCalendarPlus />
                 </button>
@@ -37,7 +37,5 @@ function Main(props) {
         </main>
     );
 }
-
-Main.propTypes = {};
 
 export default Main;

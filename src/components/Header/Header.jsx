@@ -4,10 +4,18 @@ import style from "./Header.module.scss";
 import { BsCalendar3, BsCalendar4Week } from "react-icons/bs";
 import { IoTodayOutline } from "react-icons/io5";
 import { NavLink } from "react-router";
-import { useAuth } from "../../hooks/useAuth";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
+import { removeToken } from "../Auth/AuthReducer";
 
 function Header(props) {
-    let { isAuthenticated, logout } = useAuth();
+    let isAuthenticated = useSelector((state) => state.auth.token !== null);
+    let dispatch = useDispatch();
+    let navigate = useNavigate();
+    let logout = () => {
+        dispatch(removeToken());
+        navigate("/login");
+    };
     return (
         <header className={style.wrapper}>
             <NavLink to="/" className={style.logoBar}>

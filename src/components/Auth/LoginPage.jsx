@@ -3,14 +3,15 @@ import PropTypes from "prop-types";
 import style from "./Auth.module.scss";
 import { useForm } from "react-hook-form";
 import { useFetch } from "../../hooks/useFetch";
-import { useAuth } from "../../hooks/useAuth";
+import { useDispatch } from "react-redux";
+import { setToken } from "./AuthReducer";
+import { useNavigate } from "react-router";
 
 function LoginPage(props) {
     const {
         register,
         handleSubmit,
         formState: { errors },
-        watch,
     } = useForm();
 
     const { data, error, loading, refetch } = useFetch(
@@ -25,10 +26,12 @@ function LoginPage(props) {
         refetch(JSON.stringify(formData));
     };
 
-    const { login } = useAuth();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     useEffect(() => {
         if (data) {
-            login(data.token);
+            dispatch(setToken(data.token));
+            navigate("/");
         }
     }, [data]);
 
