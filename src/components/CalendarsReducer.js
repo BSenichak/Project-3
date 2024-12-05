@@ -1,10 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { date } from "yup";
 
 const initialState = {
     events: [],
     modalState: false,
     loading: false,
     error: null,
+    month: new Date().getTime(),
+    week: new Date().getTime(),
+    day: new Date().getTime(),
 };
 
 const CalendarsReducer = createSlice({
@@ -20,6 +24,15 @@ const CalendarsReducer = createSlice({
         closeModal: (state) => {
             state.modalState = false;
         },
+        changeMonth: (state, action) => {
+            state.month = new Date(action.payload).getTime();
+        },
+        changeWeek: (state, action) => {
+            state.week = new Date(action.payload).getTime();
+        },
+        changeDay: (state, action) => {
+            state.day = new Date(action.payload).getTime();
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(addNewEvent.pending, (state) => {
@@ -28,6 +41,7 @@ const CalendarsReducer = createSlice({
         });
         builder.addCase(addNewEvent.fulfilled, (state, action) => {
             state.loading = false;
+            state.events = action.payload;
         });
         builder.addCase(addNewEvent.rejected, (state, action) => {
             state.loading = false;
@@ -43,6 +57,19 @@ const CalendarsReducer = createSlice({
             state.events = action.payload;
         });
         builder.addCase(getEvents.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload?.error || action.error.message;
+        });
+
+        builder.addCase(removeEvent.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        });
+        builder.addCase(removeEvent.fulfilled, (state, action) => {
+            state.loading = false;
+            state.events = action.payload;
+        });
+        builder.addCase(removeEvent.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload?.error || action.error.message;
         });
@@ -94,6 +121,26 @@ export const getEvents = createAsyncThunk(
     }
 );
 
-export const { addEvent, openModal, closeModal } = CalendarsReducer.actions;
+export const removeEvent = createAsyncThunk("calendars/removeEvent", async (id, { rejectWithValue, getState }) => {
+    try {
+        const response = await fetch(`http://localhost:3000/remove/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${getState().auth.token}`,
+            },
+        });
+        const result = await response.json();
+        if (!response.ok) {
+            return rejectWithValue({ error: result.error });
+        }
+        return result;
+    } catch (error) {
+        throw error;
+    }
+});
+
+
+export const { addEvent, openModal, closeModal, changeMonth, changeWeek, changeDay } = CalendarsReducer.actions;
 
 export default CalendarsReducer.reducer;

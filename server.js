@@ -105,7 +105,8 @@ app.post("/add", authenticateToken, async (req, res) => {
     const data = req.body;
     data.user_id = req.user.id;
     await pool.query("INSERT INTO Events SET ?", data);
-    res.send({ message: "Event added successfully!" });
+    let result = await pool.query("SELECT * FROM Events WHERE user_id = ?", [req.user.id]);
+    res.send(result[0]);
 });
 
 app.post("/events", authenticateToken, async (req, res) => {
@@ -113,6 +114,12 @@ app.post("/events", authenticateToken, async (req, res) => {
     if (result[0].length === 0) {
         return res.status(404).send({ error: "No events found." });
     }
+    res.send(result[0]);
+});
+
+app.delete("/remove/:id", authenticateToken, async (req, res) => {
+    await pool.query("DELETE FROM events WHERE id = ?", [req.params.id]);
+    let result = await pool.query("SELECT * FROM Events WHERE user_id = ?", [req.user.id]);
     res.send(result[0]);
 });
 

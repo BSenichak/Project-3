@@ -1,11 +1,14 @@
 import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import style from "./MCalendar.module.scss";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { changeMonth } from "../CalendarsReducer";
 
 function MCalendar(props) {
     let events = useSelector((state) => state.calendars.events);
-    const [currentDate, setCurrentDate] = useState(new Date());
+    // const [currentDate, setCurrentDate] = useState(new Date());
+    let currentDate = new Date(useSelector((state) => state.calendars.month));
+    let disptach = useDispatch();
 
     const getCalendarDates = (year, month) => {
         const startOfMonth = new Date(year, month, 0);
@@ -26,6 +29,16 @@ function MCalendar(props) {
     return (
         <div className={style.wrapper}>
             <div className={style.container}>
+                <div className={style.header}>
+                    <input
+                        type="month"
+                        value={currentDate
+                            .toISOString()
+                            .split("T")[0]
+                            .slice(0, 7)}
+                        onChange={(e) => disptach(changeMonth(e.target.value))}
+                    />
+                </div>
                 <table>
                     <thead>
                         <tr>
