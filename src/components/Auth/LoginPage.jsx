@@ -2,9 +2,8 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import style from "./Auth.module.scss";
 import { useForm } from "react-hook-form";
-import { useFetch } from "../../hooks/useFetch";
-import { useDispatch } from "react-redux";
-import { setToken } from "./AuthReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { clearError, loginUser } from "./AuthReducer";
 import { useNavigate } from "react-router";
 
 function LoginPage(props) {
@@ -14,26 +13,21 @@ function LoginPage(props) {
         formState: { errors },
     } = useForm();
 
-    const { data, error, loading, refetch } = useFetch(
-        "http://localhost:3000/login",
-        {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-        },
-        false
-    );
-    const onSubmit = (formData) => {
-        refetch(JSON.stringify(formData));
-    };
-
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { loading, error, token } = useSelector((state) => state.auth);
+    let onSubmit = (data) => {
+        dispatch(loginUser(data));
+    };
     useEffect(() => {
-        if (data) {
-            dispatch(setToken(data.token));
+        if (error) {
+            alert(error);
+            dispatch(clearError());
+        }
+        if (token) {
             navigate("/");
         }
-    }, [data]);
+    }, [error, token]);
 
     return (
         <div className={style.wrapper}>

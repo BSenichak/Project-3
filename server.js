@@ -101,9 +101,21 @@ app.get("/protected", authenticateToken, (req, res) => {
     res.send({ message: `Hello, user ${req.user.id}!` });
 });
 
-app.get("/", (req, res) => {
-    res.send("Hello World!");
+app.post("/add", authenticateToken, async (req, res) => {
+    const data = req.body;
+    data.user_id = req.user.id;
+    await pool.query("INSERT INTO Events SET ?", data);
+    res.send({ message: "Event added successfully!" });
 });
+
+app.post("/events", authenticateToken, async (req, res) => {
+    let result = await pool.query("SELECT * FROM Events WHERE user_id = ?", [req.user.id]);
+    if (result[0].length === 0) {
+        return res.status(404).send({ error: "No events found." });
+    }
+    res.send(result[0]);
+});
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

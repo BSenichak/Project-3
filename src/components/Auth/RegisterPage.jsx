@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import style from "./Auth.module.scss";
 import { useForm } from "react-hook-form";
-import { useFetch } from "../../hooks/useFetch";
 import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { clearError, registerUser } from "./AuthReducer";
 
 function RegisterPage(props) {
     const {
@@ -13,20 +14,21 @@ function RegisterPage(props) {
         watch,
     } = useForm();
 
-    const { data, error, loading, refetch } = useFetch(
-        "http://localhost:3000/register",
-        {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-        },
-        false
-    );
-    const onSubmit = (formData) => {
-        refetch(JSON.stringify(formData));
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { loading, error, token } = useSelector((state) => state.auth);
+    useEffect(() => {
+        if (error) {
+            alert(error);
+            dispatch(clearError());
+        }
+        if (token) {
+            navigate("/");
+        }
+    }, [error, token]);
+    let onSubmit = (data) => {
+        dispatch(registerUser(data));
     };
-
-    const navigate = useNavigate()
-    if(data) navigate("/login");
 
     return (
         <div className={style.wrapper}>

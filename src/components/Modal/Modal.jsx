@@ -4,7 +4,7 @@ import style from "./Modal.module.scss";
 
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { addEvent, closeModal } from "../CalendarsReducer";
+import { addEvent, addNewEvent, closeModal } from "../CalendarsReducer";
 
 function Modal(props) {
     let {
@@ -16,8 +16,8 @@ function Modal(props) {
 
     let dispatch = useDispatch();
     let submit = (data) => {
-        dispatch(addEvent(data));
-        props.open(false);
+        dispatch(addNewEvent(data));
+        dispatch(closeModal());
         reset();
     };
 
