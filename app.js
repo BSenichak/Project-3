@@ -1,8 +1,8 @@
-import express from "express";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import mysql from "mysql2/promise";
-import dotenv from "dotenv";
+const express = require("express");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const mysql = require("mysql2/promise");
+const dotenv = require("dotenv");
 dotenv.config();
 
 const pool = mysql.createPool({
@@ -117,7 +117,7 @@ app.delete("/remove/:id", authenticateToken, async (req, res) => {
 });
 
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5500;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
