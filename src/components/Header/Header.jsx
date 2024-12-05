@@ -13,9 +13,6 @@ function Header(props) {
     </a>
     <nav className={style.navBar}>
         <a href="" className={style.link}>
-            Main
-        </a>
-        <a href="" className={style.link}>
             <BsCalendar3 />
             <span>Month</span>
         </a>
