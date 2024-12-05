@@ -29,14 +29,6 @@ function Header(props) {
                         isActive ? style.active : style.link
                     }
                 >
-                    Main
-                </NavLink>
-                <NavLink
-                    to="/month"
-                    className={({ isActive }) =>
-                        isActive ? style.active : style.link
-                    }
-                >
                     <BsCalendar3 />
                     <span>Month</span>
                 </NavLink>
