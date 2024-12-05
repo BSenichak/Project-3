@@ -1,10 +1,9 @@
 {
   "name": "project-3",
   "version": "0.0.0",
-  "type": "module",
   "main": "app.js",
   "scripts": {
-    "dev" : "node app.js"
+    "start" : "node app.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

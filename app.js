@@ -1,8 +1,8 @@
-import express from "express";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import mysql from "mysql2/promise";
-import dotenv from "dotenv";
+const express = require("express");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const mysql = require("mysql2");
+const dotenv = require("dotenv");
 dotenv.config();
 
 const pool = mysql.createPool({
