@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import style from "./MCalendar.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { changeMonth } from "../CalendarsReducer";
+import { changeMonth, removeEvent } from "../CalendarsReducer";
 
 function MCalendar(props) {
     let events = useSelector((state) => state.calendars.events);
@@ -81,6 +81,7 @@ function MCalendar(props) {
                                                                 borderLeftColor:
                                                                     event.color,
                                                             }}
+                                                            onClick={() => disptach(removeEvent(event.id))}
                                                         >
                                                             {event.title}
                                                         </button>

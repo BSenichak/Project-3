@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { date } from "yup";
 
 const initialState = {
     events: [],
@@ -80,7 +79,7 @@ export const addNewEvent = createAsyncThunk(
     "calendars/addNewEvent",
     async (data, { rejectWithValue, getState }) => {
         try {
-            const response = await fetch("http://localhost:3000/add", {
+            const response = await fetch("/add", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -103,7 +102,7 @@ export const getEvents = createAsyncThunk(
     "calendars/getEvents",
     async (data, { rejectWithValue, getState }) => {
         try {
-            const response = await fetch("http://localhost:3000/events", {
+            const response = await fetch("/events", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -121,26 +120,35 @@ export const getEvents = createAsyncThunk(
     }
 );
 
-export const removeEvent = createAsyncThunk("calendars/removeEvent", async (id, { rejectWithValue, getState }) => {
-    try {
-        const response = await fetch(`http://localhost:3000/remove/${id}`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${getState().auth.token}`,
-            },
-        });
-        const result = await response.json();
-        if (!response.ok) {
-            return rejectWithValue({ error: result.error });
+export const removeEvent = createAsyncThunk(
+    "calendars/removeEvent",
+    async (id, { rejectWithValue, getState }) => {
+        try {
+            const response = await fetch(`/remove/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${getState().auth.token}`,
+                },
+            });
+            const result = await response.json();
+            if (!response.ok) {
+                return rejectWithValue({ error: result.error });
+            }
+            return result;
+        } catch (error) {
+            throw error;
         }
-        return result;
-    } catch (error) {
-        throw error;
     }
-});
+);
 
-
-export const { addEvent, openModal, closeModal, changeMonth, changeWeek, changeDay } = CalendarsReducer.actions;
+export const {
+    addEvent,
+    openModal,
+    closeModal,
+    changeMonth,
+    changeWeek,
+    changeDay,
+} = CalendarsReducer.actions;
 
 export default CalendarsReducer.reducer;

@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import style from "./WCalendar.module.scss";
 import { useSelector, useDispatch } from "react-redux";
-import { changeWeek } from "../CalendarsReducer";
+import { changeWeek, removeEvent } from "../CalendarsReducer";
 
 function WCalendar(props) {
     let events = useSelector((state) => state.calendars.events);
@@ -53,8 +53,8 @@ function WCalendar(props) {
         }
         return dates;
     };
-    const year = new Date(currentDate).getFullYear();
-    const month = new Date(currentDate).getMonth();
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
     const dates = getCalendarDates(year, month);
 
     return (
@@ -64,7 +64,11 @@ function WCalendar(props) {
                     <input
                         type="week"
                         value={getWeekInputFormat(currentDate)}
-                        onChange={(e) => disptach(changeWeek( getDateFromWeekInput(e.target.value)))}
+                        onChange={(e) =>
+                            disptach(
+                                changeWeek(getDateFromWeekInput(e.target.value))
+                            )
+                        }
                     />
                 </div>
                 <table>
@@ -105,6 +109,7 @@ function WCalendar(props) {
                                                     borderLeftColor:
                                                         event.color,
                                                 }}
+                                                onClick={() => disptach(removeEvent(event.id))}
                                             >
                                                 {event.time} {event.title}
                                             </button>

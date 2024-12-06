@@ -59,14 +59,14 @@ export const loginUser = createAsyncThunk(
         // функція, яка буде виконуватися при виклику екшену
         try {
             // відправляємо запит на сервер
-            const response = await fetch("http://localhost:3000/login", {
+            const response = await fetch("/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(data), // перетворюємо дані у JSON
             });
-            const result = await response.json(); // отримуємо дані з відповіді сервера
+            let result = await response.json(); // отримуємо дані з відповіді сервера
             if (!response.ok) {
                 // якщо сервер повернув помилку
                 return rejectWithValue({ error: result.error }); // повертаємо помилку rejectWithValue
@@ -82,7 +82,7 @@ export const registerUser = createAsyncThunk(
     "auth/registerUser",
     async (data, { rejectWithValue, dispatch }) => {
         try {
-            const response = await fetch("http://localhost:3000/register", {
+            const response = await fetch("/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -90,7 +90,7 @@ export const registerUser = createAsyncThunk(
                 body: JSON.stringify(data),
             });
 
-            const result = await response.json();
+            let result = await response.json();
             if (!response.ok) return rejectWithValue({ error: result.error });
 
             result = await dispatch(loginUser(data));
