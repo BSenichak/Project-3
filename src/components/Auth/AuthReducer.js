@@ -66,7 +66,7 @@ export const loginUser = createAsyncThunk(
                 },
                 body: JSON.stringify(data), // перетворюємо дані у JSON
             });
-            const result = await response.json(); // отримуємо дані з відповіді сервера
+            let result = await response.json(); // отримуємо дані з відповіді сервера
             if (!response.ok) {
                 // якщо сервер повернув помилку
                 return rejectWithValue({ error: result.error }); // повертаємо помилку rejectWithValue
@@ -90,7 +90,7 @@ export const registerUser = createAsyncThunk(
                 body: JSON.stringify(data),
             });
 
-            const result = await response.json();
+            let result = await response.json();
             if (!response.ok) return rejectWithValue({ error: result.error });
 
             result = await dispatch(loginUser(data));
